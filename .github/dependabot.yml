@@ -1,14 +1,26 @@
 version: 2
 updates:
-    -   package-ecosystem: "github-actions"
-        directory: "/"
-        schedule:
-            interval: "weekly"
-    -   package-ecosystem: "maven"
-        directory: "/"
-        schedule:
-            interval: "weekly"
-    -   package-ecosystem: "docker"
-        directory: "/"
-        schedule:
-            interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    target-branch: "development"
+    versioning-strategy: "lockfile-only"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    labels:
+      - "security-high"
+      - "dependencies"
+    commit-message:
+      prefix: "security"
+      include: "scope"
+    # This effectively only allows security updates (which ignore this)
+    open-pull-requests-limit: 0
+    groups:
+      security-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+          - "minor"
